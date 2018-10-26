@@ -23,10 +23,11 @@ type AllData struct {
 }
 
 type Result struct {
-	Title  string
-	ID     string
-	Place1 int
-	Place2 int
+	Title           string
+	ID              string
+	Place1          int
+	Place2          int
+	BackGroundColor string
 }
 
 type History struct {
@@ -74,6 +75,10 @@ func GetData(id1 string, id2 string, c *gin.Context) AllData {
 		history2Map[contest.ContestScreenName] = contest.Place
 	}
 
+	white := "FFFFFF"
+	red := "EBCCCC"
+	green := "D0E9C6"
+
 	// 結果を生成
 	var result []Result
 	var id1Count, id2Count = 0, 0
@@ -85,9 +90,13 @@ func GetData(id1 string, id2 string, c *gin.Context) AllData {
 			continue
 		}
 
+		backGroundColor := white
+
 		if contest.Place < place2 {
+			backGroundColor = green
 			id1Count++
 		} else if contest.Place > place2 {
+			backGroundColor = red
 			id2Count++
 		} else {
 			id1Count++
@@ -95,9 +104,10 @@ func GetData(id1 string, id2 string, c *gin.Context) AllData {
 		}
 
 		result = append(result, Result{
-			Title:  contest.ContestName,
-			Place1: contest.Place,
-			Place2: place2,
+			Title:           contest.ContestName,
+			Place1:          contest.Place,
+			Place2:          place2,
+			BackGroundColor: backGroundColor,
 		})
 	}
 
