@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html"; charset="UTF-8">
+   <title>AtCoderじゃんけん</title>
+   <style type="text/css">
+      body {
+         font-family: 'メイリオ', Meiryo,sans-serif;
+         margin: 0;
+      }
+      header {
+         color: #fff;
+         background: #000;
+         margin: 0;
+      }
+      header ul {
+         display: inline-block;
+         margin-right: 25px;
+      }
+      header ul li {
+         display: inline;
+      }
+      #main-form{
+         margin: 20px;
+      }
+      #main-table {
+         width: 90%;
+         margin: 30px;
+         border-collapse: separate;
+         border: 1px solid #ccc;
+         border-collapse: separate;
+         border-radius: 5px;
+         border-spacing: 0;
+      }
+      #result {
+         margin: 30px;
+      }
+      th, td {
+         border-bottom: 1px solid #ccc;
+         text-align: center;
+         border-right: 1px solid #ccc;
+         padding-left: 10px;
+         padding-right: 10px;
+      }
+      th {
+         height: 20px;
+         background-color: #DDDDDD;
+      }
+      td {
+         height: 50px;
+      }
+      td a {
+         text-decoration: none;
+      }
+      td a:hover {
+         text-decoration: underline;
+      }
+      caption h3 {
+         text-align: left;
+         font-size: 25px;
+         margin-bottom: 5px;
+      }
+      #future-link {
+         color: white;
+         text-decoration: none;
+      }
+      #about-link {
+         color: gray;
+         text-decoration: none;
+         margin-left: 50px;
+      }
+      #about-link:hover {
+         color: silver;
+         text-decoration: none;
+         margin-left: 50px;
+      }
+   </style>
+</head>
+<body>
+   <header>
+      <ul>
+         <li><a href="https://atcoder-janken.appspot.com" id="future-link">AtCoderじゃんけん</a></li>
+         <li><a href="https://github.com/nomikura/atcoder-janken" target="_blank" id="about-link">GitHub</a></li>
+      </ul>
+   </header>
+</body>
+    <div id="main-form">
+        <form action="/" method="GET">
+            <div>
+                <label for="id1">ID1</label>
+                <input name="id1" id="id1">
+            </div>
+            <div>
+                <label for="id2">ID2</label>
+                <input name="id2" id="id2">
+            </div>
+            <div>
+                <button>実行</button>
+            </div>
+        </form>
+    </div>
+    <div id="result">
+        {{ .ResultHTML }}
+        <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-text={{ .Result }} data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+    </div>
+    <div>
+        <table id="main-table">
+            <caption><h3>結果</h3></caption>
+            <thead>
+                <tr>
+                    <th>Contest</th>
+                    <th>{{ .ID1 }}(順位)</th>
+                    <th>{{ .ID2 }}(順位)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{ range .Results }}
+                <tr>
+                    <td>{{ .Title }}</td>
+                    <td>{{ .Place1 }}</td>
+                    <td>{{ .Place2 }}</td>
+                </tr>
+                {{ end }}
+            </tbody>
+        </table>
+    </div>
+</html>
