@@ -126,6 +126,7 @@ func GetData(id1 string, id2 string, c *gin.Context) AllData {
 		resultHTML += "勝負は引き分けです！！"
 	}
 	resultStr += "\n"
+	resultStr += "#AtCoderじゃんけん\n"
 
 	data := AllData{
 		ID1:        id1,
