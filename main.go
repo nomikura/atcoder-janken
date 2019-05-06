@@ -27,7 +27,8 @@ type Result struct {
 	ID              string
 	Place1          int
 	Place2          int
-	BackGroundColor string
+	BackGroundColor1 string
+	BackGroundColor2 string
 }
 
 type History struct {
@@ -53,7 +54,7 @@ func init() {
 		data := GetData(id1, id2, c)
 
 		// テンプレートHTMLにデータを入れる
-		t, _ := template.ParseFiles("tmpl.html")
+		t, _ := template.ParseFiles("main.html")
 		t.Execute(c.Writer, data)
 
 		// c.String(http.StatusOK, "%s \n\n %s", history1, history2)
@@ -90,13 +91,16 @@ func GetData(id1 string, id2 string, c *gin.Context) AllData {
 			continue
 		}
 
-		backGroundColor := white
+		backGroundColor1 := white
+		backGroundColor2 := white
 
 		if contest.Place < place2 {
-			backGroundColor = green
+			backGroundColor1 = green
+			backGroundColor2 = red
 			id1Count++
 		} else if contest.Place > place2 {
-			backGroundColor = red
+			backGroundColor1 = red
+			backGroundColor2 = green
 			id2Count++
 		} else {
 			id1Count++
@@ -107,7 +111,8 @@ func GetData(id1 string, id2 string, c *gin.Context) AllData {
 			Title:           contest.ContestName,
 			Place1:          contest.Place,
 			Place2:          place2,
-			BackGroundColor: backGroundColor,
+			BackGroundColor1: backGroundColor1,
+			BackGroundColor2: backGroundColor2,
 		})
 	}
 

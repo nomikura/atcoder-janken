@@ -4,7 +4,8 @@ body {
 }
 #main-form{
     margin-top: 80px;
-    text-align: center;
+    width: 50%;
+    /* text-align: center; */
 
 }
 /* body {
