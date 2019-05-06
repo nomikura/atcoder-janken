@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"strconv"
 	"time"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"google.golang.org/appengine"
@@ -22,6 +23,10 @@ type AllData struct {
 	Results    []Result
 	Date_start string
 	Date_end string
+	ABC string
+	ARC string
+	AGC string
+	Other string
 }
 
 type Result struct {
@@ -51,10 +56,11 @@ func init() {
 	router.GET("/", func(c *gin.Context) {
 		// idを取得する
 		id1, id2, date_start, date_end := c.Query("id1"), c.Query("id2"), c.Query("date_start"), c.Query("date_end")
+		abc, arc, agc, other := c.Query("abc"), c.Query("arc"), c.Query("agc"), c.Query("other")
 		
 
 		// 結果を取得する
-		data := GetData(id1, id2, date_start, date_end, c)
+		data := GetData(id1, id2, date_start, date_end, abc, arc, agc, other, c)
 
 		// テンプレートHTMLにデータを入れる
 		t, _ := template.ParseFiles("main.html")
@@ -67,7 +73,7 @@ func init() {
 	// router.Run(":8080")
 }
 
-func GetData(id1 string, id2 string, date_start string, date_end string, c *gin.Context) AllData {
+func GetData(id1 string, id2 string, date_start string, date_end string, abc string, arc string, agc string, other string,  c *gin.Context) AllData {
 	// 2人のhistoryを取得
 	var history1, history2 []History
 	SetUserHistory(id1, &history1, c)
@@ -103,6 +109,19 @@ func GetData(id1 string, id2 string, date_start string, date_end string, c *gin.
 		}
 		
 		if contest.EndTime.After(dt) {
+			continue
+		}
+
+		if abc == "" && strings.Contains(contest.ContestName, "Beginner") {
+			continue
+		}
+		if arc == "" && strings.Contains(contest.ContestName, "Regular") {
+			continue
+		}
+		if agc == "" && strings.Contains(contest.ContestName, "Grand") {
+			continue
+		}
+		if other == "" && (!strings.Contains(contest.ContestName, "Beginner") && !strings.Contains(contest.ContestName, "Regular") && !strings.Contains(contest.ContestName, "Grand")) {
 			continue
 		}
 
@@ -158,6 +177,10 @@ func GetData(id1 string, id2 string, date_start string, date_end string, c *gin.
 		Results:    result,
 		Date_start: date_start,
 		Date_end: date_end,
+		ABC: abc,
+		ARC: arc,
+		AGC: agc,
+		Other: other,
 	}
 
 	return data

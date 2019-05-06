@@ -9,20 +9,6 @@
       integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous">
       <script src="static/js/jquery-3.3.1.min.js"></script>
    </head>
-   <script type="text/javascript">
-      var today = new Date();
-      var date_txt = today.getFullYear() + '-' + ("0" + (today.getMonth() + 1)).slice(-2);
-      $(document).ready(function(){
-         var date_start = $("#date_start").val();
-         var date_end = $("#date_end").val();
-         if(date_start == ""){
-            $("#date_start").val("2010-01");
-         }
-         if(date_end == ""){
-            $("#date_end").val(date_txt);
-         }
-      });
-   </script>
    <body class="bg-light">
         <nav class="navbar navbar-dark bg-dark fixed-top d-block">
             <div>
@@ -53,25 +39,25 @@
                      </div>
                   </div>
                   <div class="form-check mb-1">
-                        <input checked class="form-check-input" type="checkbox" value="" id="abc">
+                        <input class="form-check-input" type="checkbox" value="1" id="abc" name="abc">
                         <label class="form-check-label" for="abc">
                           AtCoder Beginner Contest
                         </label>
                       </div>
                       <div class="form-check mb-1">
-                     <input checked class="form-check-input" type="checkbox" value="" id="arc">
+                     <input class="form-check-input" type="checkbox" value="1" id="arc" name="arc">
                      <label class="form-check-label" for="arc">
                         AtCoder Regular Contest
                      </label>
                      </div>
                      <div class="form-check mb-1">
-                     <input checked class="form-check-input" type="checkbox" value="" id="agc">
+                     <input class="form-check-input" type="checkbox" value="1" id="agc" name="agc">
                      <label class="form-check-label" for="agc">
                         AtCoder Grand Contest
                      </label>
                      </div>
                   <div class="form-check mb-1">
-                        <input checked class="form-check-input" type="checkbox" value="" id="other">
+                        <input class="form-check-input" type="checkbox" value="1" id="other" name="other">
                         <label class="form-check-label" for="other">
                            その他のコンテスト
                         </label>
@@ -79,6 +65,10 @@
                   <button type="submit" class="btn btn-primary">じゃんけん！</button>
                 </form>
          </div>
+         <span class="d-none" id="abc-v">{{ .ABC }}</span>
+         <span class="d-none" id="arc-v">{{ .ARC }}</span>
+         <span class="d-none" id="agc-v">{{ .AGC }}</span>
+         <span class="d-none" id="other-v">{{ .Other }}</span>
       <div class="card mt-3">
             <!-- <div class="card-header">
               結果
@@ -110,4 +100,44 @@
          </table>
       </div>
    </body>
+   <script type="text/javascript">
+      var today = new Date();
+      var date_txt = today.getFullYear() + '-' + ("0" + (today.getMonth() + 1)).slice(-2);
+      var is_default = true;
+
+      $(document).ready(function(){
+         var date_start = $("#date_start").val();
+         var date_end = $("#date_end").val();
+         if(date_start == ""){
+            $("#date_start").val("2010-01");
+         }
+         if(date_end == ""){
+            $("#date_end").val(date_txt);
+         }
+
+         if($("#abc-v").text()){
+            $("#abc").prop("checked", true);
+            is_default = false;
+         }
+         if($("#arc-v").text()){
+            $("#arc").prop("checked", true);
+            is_default = false;
+         }
+         if($("#agc-v").text()){
+            $("#agc").prop("checked", true);
+            is_default = false;
+         }
+         if($("#other-v").text()){
+            $("#other").prop("checked", true);
+            is_default = false;
+         }
+         if(is_default){
+            $("#abc").prop("checked", true);
+            $("#arc").prop("checked", true);
+            $("#agc").prop("checked", true);
+            $("#other").prop("checked", true);
+
+         }
+      });
+   </script>
 </html>
