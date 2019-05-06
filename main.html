@@ -13,7 +13,14 @@
       var today = new Date();
       var date_txt = today.getFullYear() + '-' + ("0" + (today.getMonth() + 1)).slice(-2);
       $(document).ready(function(){
-         $("#date_end").val(date_txt);
+         var date_start = $("#date_start").val();
+         var date_end = $("#date_end").val();
+         if(date_start == ""){
+            $("#date_start").val("2010-01");
+         }
+         if(date_end == ""){
+            $("#date_end").val(date_txt);
+         }
       });
    </script>
    <body class="bg-light">
@@ -38,11 +45,11 @@
                   <div class="form-row">
                      <div class="form-group col-md-6">
                         <label for="id1">開始</label>
-                        <input type="month" class="form-control" name="date_start" id="date_start" value="2014-01">
+                        <input type="month" class="form-control" name="date_start" id="date_start" value="{{ .Date_start }}">
                      </div>
                      <div class="form-group col-md-6">
                         <label for="id2">終了</label>
-                        <input type="month" class="form-control" name="date_end" id="date_end">
+                        <input type="month" class="form-control" name="date_end" id="date_end" value="{{ .Date_end }}">
                      </div>
                   </div>
                   <div class="form-check mb-1">
@@ -95,7 +102,7 @@
                {{ range .Results }}
                <tr>
                   <td bgcolor={{ .BackGroundColor1 }}>{{ .Place1 }}</td>
-                  <td>{{ .Title }}</td>
+                  <td bgcolor="white">{{ .Title }}</td>
                   <td bgcolor={{ .BackGroundColor2 }}>{{ .Place2 }}</td>
                </tr>
                {{ end }}

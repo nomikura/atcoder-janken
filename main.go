@@ -20,6 +20,8 @@ type AllData struct {
 	Result     string
 	ResultHTML string
 	Results    []Result
+	Date_start string
+	Date_end string
 }
 
 type Result struct {
@@ -48,10 +50,11 @@ func init() {
 
 	router.GET("/", func(c *gin.Context) {
 		// idを取得する
-		id1, id2 := c.Query("id1"), c.Query("id2")
+		id1, id2, date_start, date_end := c.Query("id1"), c.Query("id2"), c.Query("date_start"), c.Query("date_end")
+		
 
 		// 結果を取得する
-		data := GetData(id1, id2, c)
+		data := GetData(id1, id2, date_start, date_end, c)
 
 		// テンプレートHTMLにデータを入れる
 		t, _ := template.ParseFiles("main.html")
@@ -64,7 +67,7 @@ func init() {
 	// router.Run(":8080")
 }
 
-func GetData(id1 string, id2 string, c *gin.Context) AllData {
+func GetData(id1 string, id2 string, date_start string, date_end string, c *gin.Context) AllData {
 	// 2人のhistoryを取得
 	var history1, history2 []History
 	SetUserHistory(id1, &history1, c)
@@ -80,6 +83,10 @@ func GetData(id1 string, id2 string, c *gin.Context) AllData {
 	red := "EBCCCC"
 	green := "D0E9C6"
 
+	layout := "2006-01"
+	ds, _ := time.Parse(layout, date_start)
+	dt, _ := time.Parse(layout, date_end)
+
 	// 結果を生成
 	var result []Result
 	var id1Count, id2Count = 0, 0
@@ -88,6 +95,14 @@ func GetData(id1 string, id2 string, c *gin.Context) AllData {
 		place2, ok := history2Map[contest.ContestScreenName]
 		// ID2がコンテストに出ていなければスキップ
 		if !ok {
+			continue
+		}
+
+		if contest.EndTime.Before(ds) {
+			continue
+		}
+		
+		if contest.EndTime.After(dt) {
 			continue
 		}
 
@@ -130,6 +145,8 @@ func GetData(id1 string, id2 string, c *gin.Context) AllData {
 		resultStr += "勝負は引き分けです！！"
 		resultHTML += "勝負は引き分けです！！"
 	}
+	resultHTML += "(" + date_start + " ~ " + date_end + ")"
+	resultStr += "(" + date_start + " ~ " + date_end + ")"
 	resultStr += "\n"
 	resultStr += "#AtCoderじゃんけん\n"
 
@@ -139,6 +156,8 @@ func GetData(id1 string, id2 string, c *gin.Context) AllData {
 		Result:     resultStr,
 		ResultHTML: resultHTML,
 		Results:    result,
+		Date_start: date_start,
+		Date_end: date_end,
 	}
 
 	return data
