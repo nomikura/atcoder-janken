@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html"; charset="UTF-8">
+      <title>AtCoderじゃんけん</title>
+      <link rel="stylesheet" type="text/css" href="css/style.css">
+      <link rel="stylesheet" href="css/bootstrap.min.css">
+      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous">
+      <script src="js/jquery-3.3.1.min.js"></script>
+   </head>
+   <body class="bg-light">
+        <nav class="navbar navbar-dark bg-dark fixed-top d-block">
+                <div>
+                    <a href="https://atcoder-janken.appspot.com" id="future-link" class="navbar-brand">AtCoderじゃんけん</a>
+                    <a href="https://github.com/nomikura/atcoder-janken" target="_blank" id="about-link" class="navbar-brand"><i class="fab fa-github"></i> GitHub</a>
+                </div>
+            </nav>
+        <div id="main-form">
+            <form action="/" method="GET" class="form-inline">
+                <div class="form-group">
+                    <!-- <label for="id1">ID1</label> -->
+                    <input type="text" class="form-control m-2" name="id1" id="id1" placeholder="player1" value={{ .ID1 }}>
+                </div>
+                <span>VS</span>
+                <div class="form-group">
+                    <!-- <label for="id2">ID2</label> -->
+                    <input type="text" class="form-control m-2" name="id2" id="id2" placeholder="player2" value={{ .ID2 }}>
+                </div>
+                <button type="submit" class="btn btn-primary">じゃんけん！</button>
+            </form>
+      <!-- <div id="main-form">
+         <form action="/" method="GET">
+               <div>
+                  <label for="id1">ID1</label>
+                  <input name="id1" id="id1" value={{ .ID1 }}>
+               </div>
+               <div>
+                  <label for="id2">ID2</label>
+                  <input name="id2" id="id2" value={{ .ID2 }}>
+               </div>
+               <div>
+                  <button>実行</button>
+               </div>
+         </form>
+      </div> -->
+      <div id="result">
+         {{ .ResultHTML }}
+         <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-text={{ .Result }} data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+      </div>
+      <div>
+         <table id="main-table">
+               <caption><h3>結果</h3></caption>
+               <thead>
+                  <tr>
+                     <th>Contest</th>
+                     <th>{{ .ID1 }}(順位)</th>
+                     <th>{{ .ID2 }}(順位)</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  {{ range .Results }}
+                  <tr bgcolor={{ .BackGroundColor }}>
+                     <td>{{ .Title }}</td>
+                     <td>{{ .Place1 }}</td>
+                     <td>{{ .Place2 }}</td>
+                  </tr>
+                  {{ end }}
+               </tbody>
+         </table>
+      </div> -->
+   </body>
+</html>
+<script>
+   $("body").css("background-color", "white")
+   
+</script>

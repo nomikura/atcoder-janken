@@ -1,0 +1,88 @@
+
+body {
+    padding: 20px;
+}
+#main-form{
+    margin-top: 80px;
+    text-align: center;
+
+}
+/* body {
+    font-family: 'メイリオ', Meiryo,sans-serif;
+    margin: 0;
+}
+header {
+    color: #fff;
+    background: #000;
+    margin: 0;
+}
+header ul {
+    display: inline-block;
+    margin-right: 25px;
+}
+header ul li {
+    display: inline;
+}
+#main-form{
+    margin: 20px;
+}
+#main-table {
+    width: 90%;
+    margin: 30px;
+    border-collapse: separate;
+    border: 1px solid #ccc;
+    border-collapse: separate;
+    border-radius: 5px;
+    border-spacing: 0;
+}
+#result {
+    margin: 30px;
+}
+th, td {
+    border-bottom: 1px solid #ccc;
+    text-align: center;
+    border-right: 1px solid #ccc;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+th {
+    height: 20px;
+    background-color: #DDDDDD;
+}
+td {
+    height: 50px;
+}
+td a {
+    text-decoration: none;
+}
+td a:hover {
+    text-decoration: underline;
+}
+caption h3 {
+    text-align: left;
+    font-size: 25px;
+    margin-bottom: 5px;
+}
+#future-link {
+    color: white;
+    text-decoration: none;
+}
+#about-link {
+    color: gray;
+    text-decoration: none;
+    margin-left: 50px;
+}
+#about-link:hover {
+    color: silver;
+    text-decoration: none;
+    margin-left: 50px;
+}
+
+body {
+    padding: 20px;
+}
+#main-form{
+    margin-top: 80px;
+    text-align: center;
+
+} */
