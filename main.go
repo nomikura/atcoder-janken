@@ -92,6 +92,7 @@ func GetData(id1 string, id2 string, date_start string, date_end string, abc str
 	layout := "2006-01"
 	ds, _ := time.Parse(layout, date_start)
 	dt, _ := time.Parse(layout, date_end)
+	dt2 := dt.AddDate(0, 1, 0)
 
 	// 結果を生成
 	var result []Result
@@ -99,16 +100,8 @@ func GetData(id1 string, id2 string, date_start string, date_end string, abc str
 	for _, contest := range history1 {
 		// ID2の順位
 		place2, ok := history2Map[contest.ContestScreenName]
-		// ID2がコンテストに出ていなければスキップ
-		if !ok {
-			continue
-		}
 
-		if contest.EndTime.Before(ds) {
-			continue
-		}
-		
-		if contest.EndTime.After(dt) {
+		if !ok || contest.EndTime.Before(ds) || contest.EndTime.After(dt2) {
 			continue
 		}
 
