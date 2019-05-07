@@ -14,7 +14,7 @@
 <body class="bg-light">
    <nav class="navbar navbar-dark bg-dark fixed-top d-block">
       <div>
-         <a href="https://atcoder-janken.appspot.com" id="future-link" class="navbar-brand">AtCoderじゃんけんβ</a>
+         <a href="https://atcoder-janken.appspot.com" id="future-link" class="navbar-brand">AtCoderじゃんけん</a>
          <a href="https://github.com/nomikura/atcoder-janken" target="_blank" id="about-link" class="navbar-brand"><i
                class="fab fa-github"></i> GitHub</a>
       </div>
@@ -24,11 +24,11 @@
          <div class="form-row">
             <div class="form-group col-md-6">
                <label for="id1">Player 1</label>
-               <input type="text" class="form-control" name="id1" id="id1" placeholder="tourist" value="{{ .ID1 }}">
+               <input type="text" class="form-control" name="id1" id="id1" placeholder="player1" value="{{ .ID1 }}">
             </div>
             <div class="form-group col-md-6">
                <label for="id2">Player 2</label>
-               <input type="text" class="form-control" name="id2" id="id2" placeholder="tourist" value="{{ .ID2 }}">
+               <input type="text" class="form-control" name="id2" id="id2" placeholder="player2" value="{{ .ID2 }}">
             </div>
          </div>
          <div class="form-row">
@@ -72,11 +72,9 @@
    <span class="d-none" id="arc-v">{{ .ARC }}</span>
    <span class="d-none" id="agc-v">{{ .AGC }}</span>
    <span class="d-none" id="other-v">{{ .Other }}</span>
+   <span class="d-none" id="start">{{ .ID1 }}{{ .ID2 }}</span>
    <div class="card mt-3">
-      <!-- <div class="card-header">
-              結果
-            </div> -->
-      <div class="card-body h5 text-center">
+      <div class="card-body h5 text-center" id="result">
          {{ .ResultHTML }}
          <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-text={{ .Result }}
             data-show-count="false">Tweet</a>
@@ -141,6 +139,9 @@
          $("#agc").prop("checked", true);
          $("#other").prop("checked", true);
 
+      }
+      if($("#start").text() == ""){
+         $("#result").text("プレイヤーIDを入力してください...")
       }
    });
 </script>
