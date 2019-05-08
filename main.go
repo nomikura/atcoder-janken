@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"strconv"
 	"time"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"google.golang.org/appengine"
@@ -20,6 +21,12 @@ type AllData struct {
 	Result     string
 	ResultHTML string
 	Results    []Result
+	Date_start string
+	Date_end string
+	ABC string
+	ARC string
+	AGC string
+	Other string
 }
 
 type Result struct {
@@ -27,7 +34,8 @@ type Result struct {
 	ID              string
 	Place1          int
 	Place2          int
-	BackGroundColor string
+	BackGroundColor1 string
+	BackGroundColor2 string
 }
 
 type History struct {
@@ -47,13 +55,15 @@ func init() {
 
 	router.GET("/", func(c *gin.Context) {
 		// idを取得する
-		id1, id2 := c.Query("id1"), c.Query("id2")
+		id1, id2, date_start, date_end := c.Query("id1"), c.Query("id2"), c.Query("date_start"), c.Query("date_end")
+		abc, arc, agc, other := c.Query("abc"), c.Query("arc"), c.Query("agc"), c.Query("other")
+		
 
 		// 結果を取得する
-		data := GetData(id1, id2, c)
+		data := GetData(id1, id2, date_start, date_end, abc, arc, agc, other, c)
 
 		// テンプレートHTMLにデータを入れる
-		t, _ := template.ParseFiles("tmpl.html")
+		t, _ := template.ParseFiles("main.html")
 		t.Execute(c.Writer, data)
 
 		// c.String(http.StatusOK, "%s \n\n %s", history1, history2)
@@ -63,7 +73,7 @@ func init() {
 	// router.Run(":8080")
 }
 
-func GetData(id1 string, id2 string, c *gin.Context) AllData {
+func GetData(id1 string, id2 string, date_start string, date_end string, abc string, arc string, agc string, other string,  c *gin.Context) AllData {
 	// 2人のhistoryを取得
 	var history1, history2 []History
 	SetUserHistory(id1, &history1, c)
@@ -79,24 +89,45 @@ func GetData(id1 string, id2 string, c *gin.Context) AllData {
 	red := "EBCCCC"
 	green := "D0E9C6"
 
+	layout := "2006-01"
+	ds, _ := time.Parse(layout, date_start)
+	dt, _ := time.Parse(layout, date_end)
+	dt2 := dt.AddDate(0, 1, 0)
+
 	// 結果を生成
 	var result []Result
 	var id1Count, id2Count = 0, 0
 	for _, contest := range history1 {
 		// ID2の順位
 		place2, ok := history2Map[contest.ContestScreenName]
-		// ID2がコンテストに出ていなければスキップ
-		if !ok {
+
+		if !ok || contest.EndTime.Before(ds) || contest.EndTime.After(dt2) {
 			continue
 		}
 
-		backGroundColor := white
+		if abc == "" && strings.Contains(contest.ContestName, "Beginner") {
+			continue
+		}
+		if arc == "" && strings.Contains(contest.ContestName, "Regular") {
+			continue
+		}
+		if agc == "" && strings.Contains(contest.ContestName, "Grand") {
+			continue
+		}
+		if other == "" && (!strings.Contains(contest.ContestName, "Beginner") && !strings.Contains(contest.ContestName, "Regular") && !strings.Contains(contest.ContestName, "Grand")) {
+			continue
+		}
+
+		backGroundColor1 := white
+		backGroundColor2 := white
 
 		if contest.Place < place2 {
-			backGroundColor = green
+			backGroundColor1 = green
+			backGroundColor2 = red
 			id1Count++
 		} else if contest.Place > place2 {
-			backGroundColor = red
+			backGroundColor1 = red
+			backGroundColor2 = green
 			id2Count++
 		} else {
 			id1Count++
@@ -107,7 +138,8 @@ func GetData(id1 string, id2 string, c *gin.Context) AllData {
 			Title:           contest.ContestName,
 			Place1:          contest.Place,
 			Place2:          place2,
-			BackGroundColor: backGroundColor,
+			BackGroundColor1: backGroundColor1,
+			BackGroundColor2: backGroundColor2,
 		})
 	}
 
@@ -125,6 +157,8 @@ func GetData(id1 string, id2 string, c *gin.Context) AllData {
 		resultStr += "勝負は引き分けです！！"
 		resultHTML += "勝負は引き分けです！！"
 	}
+	resultHTML += "(" + date_start + " ~ " + date_end + ")"
+	resultStr += "(" + date_start + " ~ " + date_end + ")"
 	resultStr += "\n"
 	resultStr += "#AtCoderじゃんけん\n"
 
@@ -134,6 +168,12 @@ func GetData(id1 string, id2 string, c *gin.Context) AllData {
 		Result:     resultStr,
 		ResultHTML: resultHTML,
 		Results:    result,
+		Date_start: date_start,
+		Date_end: date_end,
+		ABC: abc,
+		ARC: arc,
+		AGC: agc,
+		Other: other,
 	}
 
 	return data
