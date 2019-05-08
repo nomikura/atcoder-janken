@@ -2,12 +2,13 @@ package janken
 
 import (
 	"encoding/json"
+	"fmt"
 	"html/template"
 	"io/ioutil"
 	"net/http"
 	"strconv"
-	"time"
 	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"google.golang.org/appengine"
@@ -22,18 +23,18 @@ type AllData struct {
 	ResultHTML string
 	Results    []Result
 	Date_start string
-	Date_end string
-	ABC string
-	ARC string
-	AGC string
-	Other string
+	Date_end   string
+	ABC        string
+	ARC        string
+	AGC        string
+	Other      string
 }
 
 type Result struct {
-	Title           string
-	ID              string
-	Place1          int
-	Place2          int
+	Title            string
+	ID               string
+	Place1           int
+	Place2           int
 	BackGroundColor1 string
 	BackGroundColor2 string
 }
@@ -57,7 +58,16 @@ func init() {
 		// idを取得する
 		id1, id2, date_start, date_end := c.Query("id1"), c.Query("id2"), c.Query("date_start"), c.Query("date_end")
 		abc, arc, agc, other := c.Query("abc"), c.Query("arc"), c.Query("agc"), c.Query("other")
-		
+
+		if date_start == "" {
+			date_start = "2010-01"
+			currentTime := time.Now()
+			date_end = fmt.Sprintf("%d-%02d", currentTime.Year(), int(currentTime.Month()))
+			abc = "1"
+			arc = "1"
+			agc = "1"
+			other = "1"
+		}
 
 		// 結果を取得する
 		data := GetData(id1, id2, date_start, date_end, abc, arc, agc, other, c)
@@ -73,7 +83,7 @@ func init() {
 	// router.Run(":8080")
 }
 
-func GetData(id1 string, id2 string, date_start string, date_end string, abc string, arc string, agc string, other string,  c *gin.Context) AllData {
+func GetData(id1 string, id2 string, date_start string, date_end string, abc string, arc string, agc string, other string, c *gin.Context) AllData {
 	// 2人のhistoryを取得
 	var history1, history2 []History
 	SetUserHistory(id1, &history1, c)
@@ -135,9 +145,9 @@ func GetData(id1 string, id2 string, date_start string, date_end string, abc str
 		}
 
 		result = append(result, Result{
-			Title:           contest.ContestName,
-			Place1:          contest.Place,
-			Place2:          place2,
+			Title:            contest.ContestName,
+			Place1:           contest.Place,
+			Place2:           place2,
 			BackGroundColor1: backGroundColor1,
 			BackGroundColor2: backGroundColor2,
 		})
@@ -169,11 +179,11 @@ func GetData(id1 string, id2 string, date_start string, date_end string, abc str
 		ResultHTML: resultHTML,
 		Results:    result,
 		Date_start: date_start,
-		Date_end: date_end,
-		ABC: abc,
-		ARC: arc,
-		AGC: agc,
-		Other: other,
+		Date_end:   date_end,
+		ABC:        abc,
+		ARC:        arc,
+		AGC:        agc,
+		Other:      other,
 	}
 
 	return data
